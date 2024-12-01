@@ -3,9 +3,8 @@ package main
 import (
 	"fmt"
 	"math"
-	"slices"
 
-	// "slices"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -15,6 +14,7 @@ import (
 func main() {
 	lines := internal.ReadLines("input")
 	var left, right []int
+	freq := make(map[int]int)
 	for _, line := range lines {
 		parts := strings.Split(line, "   ")
 		first, err := strconv.Atoi(parts[0])
@@ -28,6 +28,8 @@ func main() {
 			return
 		}
 
+		freq[second]++
+
 		left = append(left, first)
 		right = append(right, second)
 	}
@@ -35,10 +37,11 @@ func main() {
 	slices.Sort(left)
 	slices.Sort(right)
 
-	sum := 0
+	var sum, totalSimilarityScore int
 	for i := 0; i < len(left); i++ {
+		totalSimilarityScore += left[i] * freq[left[i]]
 		sum += int(math.Abs(float64(left[i] - right[i])))
 	}
 
-	fmt.Println(sum)
+	fmt.Println(sum, totalSimilarityScore)
 }
